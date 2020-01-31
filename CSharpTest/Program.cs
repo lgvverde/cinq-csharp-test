@@ -1,30 +1,77 @@
-﻿using System;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Net;
+﻿using CSharpTest.DAL;
+using CSharpTest.Helper;
+using Models;
+using System;
+using System.Collections.Generic;
 
 namespace CSharpTest
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Press any key to start");
             Console.ReadKey();
+            Console.WriteLine("Searching for information...");
 
-            string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            SqlConnection con = new SqlConnection(connString);
-            con.Open();
-
-            using (var client = new WebClient())
+            try
             {
-                client.Headers.Add("Content-Type:application/json");
-                client.Headers.Add("Accept:application/json");
-                var result = client.DownloadString("http://localhost:24520/api/printers");
-                Console.WriteLine(Environment.NewLine + result);
+                var printerList = GetPrinters();
+
+                if (printerList.Count > 0)
+                    StorePrinter(printerList);
+                else
+                    Console.WriteLine("Seems you don't have printers to list!");
+
+                Console.WriteLine("Done!");
+                Console.WriteLine("Press any key to exit the application...");
+                Console.ReadKey();
             }
-            
-            Console.WriteLine("Done!");
+            catch (Exception er)
+            {
+                Console.WriteLine("Error: " + er.Message);
+                Console.ReadKey();                
+            }
+
+        }
+
+        // GetPrinters
+        // Reads the information from an API call, converting the
+        // information to a Printer Model.
+        public static List<PrinterInfo> GetPrinters()
+        {
+            try
+            {
+                List<PrinterInfo> printerInfoList = API.GetPrintersData();
+                return printerInfoList;
+            }
+            catch (Exception er)
+            {
+                throw er;
+            }
+        }
+
+
+        // StorePrinter
+        // Stores a printer information in our DB.
+        public static bool StorePrinter(List<PrinterInfo> printerInfoList)
+        {
+            PrinterDAL printerDAL = new PrinterDAL();
+
+            try
+            {
+                foreach (var printer in printerInfoList)
+                {
+                    printerDAL.StorePrinter(printer);
+                    Console.WriteLine("Printer: " + printer.SerialKey + " - "+ printer.Name + " was stored in our DB.");
+                }
+                return true;
+
+            }
+            catch (Exception er)
+            {
+                throw er;
+            }
         }
     }
 }
