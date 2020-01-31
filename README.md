@@ -1,4 +1,4 @@
-# CSharpWebApi
+## CSharpWebApi
 Here is a simple c# test for the candidates.
 
 1. Refactor the current code, using the Solid Principles
@@ -11,4 +11,20 @@ Here is a simple c# test for the candidates.
    * Create repositories with a virtual database, using the models as tables.(static classes with lists just holding data)
    * Refactor the PrintersController to use the repositories you just created
 4. Write tests for both Console and WebAPI projects, as well as for any projects you might create.
+
+# Updates
+- Applied the DAL architecture, creating a DAL folder in each project.
+  - Easy maintenance;
+  - Better management around the functions that get and post information to the DB.
+- Created 2 more projects:
+  - Models;
+  - UnitTests;
+ 
+### Models
+- Created to be used as a unique layer for these two projects, in this way, you'll be able to use the WebAPI and Console projects with just one model.
+
+### UniTests
+- Created 2 classes to do the unit tests:
+  - ConsoleTests (Testing getting the information and store it in the DB);
+  - WebApiTests (Getting and storing based on a virtual db, a class instance holding data, as said in the description).
 
