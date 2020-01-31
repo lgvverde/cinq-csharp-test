@@ -26,5 +26,6 @@ Here is a simple c# test for the candidates.
 ### UniTests
 - Created 2 classes to do the unit tests:
   - ConsoleTests (Testing getting the information and store it in the DB);
+    - Do not forget to Run the WebAPI on another Visual Studio Instance or another Service, otherwise your tests will fail.
   - WebApiTests (Getting and storing based on a virtual db, a class instance holding data, as said in the description).
 
